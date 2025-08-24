@@ -4,7 +4,7 @@ provider "azurerm" {
 }
 
 module "hub" {
-  source               = "../../Modules/hub-logic"
+  source               = "../../Modules/Network/hub-logic"
   resource_group_name  = var.resource_group_name
   location             = var.location
   rg-n8n-aks-nsg_name  = var.rg-n8n-aks-nsg_name
@@ -17,7 +17,7 @@ module "hub" {
 }
 
 module "logic" {
-  source               = "../../Modules/spoke_logic"
+  source               = "../../Modules/Network/spoke_logic"
   resource_group_name  = var.resource_group_name
   location             = var.location
   rg-n8n-aks-vnet_name = var.logic_rg-n8n-aks-vnet_name
@@ -26,7 +26,7 @@ module "logic" {
 }
 
 module "data" {
-  source               = "../../Modules/spoke_data"
+  source               = "../../Modules/Network/spoke_data"
   resource_group_name  = var.resource_group_name
   location             = var.location
   rg-n8n-aks-vnet_name = var.data_rg-n8n-aks-vnet_name
@@ -37,7 +37,7 @@ module "data" {
 }
 
 module "hub-logic-peering" {
-  source                      = "../../Modules/network_peering"
+  source                      = "../../Modules/Network/network_peering"
   resource_group_name         = var.resource_group_name
   rg-n8n-aks-vnet_name        = module.hub.virtual_network_name
   remote_virtual_network_id   = module.logic.virtual_network_logic_id
@@ -45,7 +45,7 @@ module "hub-logic-peering" {
 }
 
 module "logic-hub-peering" {
-  source                      = "../../Modules/network_peering"
+  source                      = "../../Modules/Network/network_peering"
   resource_group_name         = var.resource_group_name
   rg-n8n-aks-vnet_name        = module.logic.virtual_network_name
   remote_virtual_network_id   = module.hub.virtual_network_hub_id
@@ -54,7 +54,7 @@ module "logic-hub-peering" {
 }
 
 module "logic-data-peering" {
-  source                      = "../../Modules/network_peering"
+  source                      = "../../Modules/Network/network_peering"
   resource_group_name         = var.resource_group_name
   rg-n8n-aks-vnet_name        = module.logic.virtual_network_name
   remote_virtual_network_id   = module.data.virtual_network_data_id
@@ -63,7 +63,7 @@ module "logic-data-peering" {
 }
 
 module "data-logic-peering" {
-  source                      = "../../Modules/network_peering"
+  source                      = "../../Modules/Network/network_peering"
   resource_group_name         = var.resource_group_name
   rg-n8n-aks-vnet_name        = module.data.virtual_network_name
   remote_virtual_network_id   = module.logic.virtual_network_logic_id

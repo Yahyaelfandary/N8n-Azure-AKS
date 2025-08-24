@@ -39,18 +39,51 @@ resource "azurerm_virtual_network" "rg-n8n-aks" {
   resource_group_name = azurerm_resource_group.rg-n8n-aks.name
   address_space       = var.address_space
 
-  subnet {
-    name             = "AzurefirewallSubnet"
-    address_prefixes = [var.address_prefixes[0]]
+  tags = {
+    environment = "Production"
   }
+}
 
-  subnet {
-    name             = "JumpServerSubnet"
-    address_prefixes = [var.address_prefixes[1]]
-    security_group   = azurerm_network_security_group.rg-n8n-aks-nsg.id
-  }
+resource "azurerm_subnet" "azurefirewall" {
+  name                 = "AzurefirewallSubnet"
+  resource_group_name  = azurerm_resource_group.rg-n8n-aks.name
+  virtual_network_name = azurerm_virtual_network.rg-n8n-aks.name
+  address_prefixes     = [var.address_prefixes[0]]
+}
+
+resource "azurerm_subnet" "jumpserver" {
+  name                 = var.jumpserver_subnet_name
+  resource_group_name  = azurerm_resource_group.rg-n8n-aks.name
+  virtual_network_name = azurerm_virtual_network.rg-n8n-aks.name
+  address_prefixes     = [var.address_prefixes[1]]
+}
+
+resource "azurerm_subnet_network_security_group_association" "jumpserver_nsg_assoc" {
+  subnet_id                 = azurerm_subnet.jumpserver.id
+  network_security_group_id = azurerm_network_security_group.rg-n8n-aks-nsg.id
+}
+
+resource "azurerm_public_ip" "JumpServerPublicIP" {
+  name                = var.JumpServerPublicIP
+  resource_group_name = azurerm_resource_group.rg-n8n-aks.name
+  location            = azurerm_resource_group.rg-n8n-aks.location
+  allocation_method   = "Static"
+  sku                 = "Standard"
 
   tags = {
     environment = "Production"
+  }
+}
+
+resource "azurerm_network_interface" "JumpServerNIC" {
+  name                = "JumpServerNIC"
+  location            = azurerm_resource_group.rg-n8n-aks.location
+  resource_group_name = azurerm_resource_group.rg-n8n-aks.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.jumpserver.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id           = azurerm_public_ip.JumpServerPublicIP.id
   }
 }

@@ -6,6 +6,6 @@ output "virtual_network_name" {
   value = azurerm_virtual_network.rg-n8n-aks.name
 }
 
-output "azurerm_virtual_network" {
+output "virtual_network_data_id" {
   value = azurerm_virtual_network.rg-n8n-aks.id
 }

@@ -23,3 +23,14 @@ variable "address_prefixes" {
   type        = list(string)
   default     = ["10.0.2.0/27"]
 }
+
+variable "rg-n8n-aks-nsg_name" {
+  description = "The name of the network security group"
+  type        = string
+  default     = "rg-n8n-aks-nsg"
+}
+
+variable "source_address_prefix_logic" {
+  description = "The address prefix for the logic subnet"
+  type        = string
+}

@@ -25,6 +25,16 @@ variable "address_space" {
 
 }
 
+variable "hub_jumpserver_subnet_name" {
+  description = "The name of the jump server subnet"
+  type        = string
+}
+
+variable "JumpServerPublicIP" {
+  description = "The name of the Jump Server Public IP"
+  type        = string
+}
+
 variable "address_prefixes" {
   description = "The address prefixes for the virtual network subnets"
   type        = list(string)
@@ -47,7 +57,7 @@ variable "logic_address_space" {
   type        = list(string)
 }
 
-variable "logicaddress_prefixes" {
+variable "logic_address_prefixes" {
   description = "The address prefixes for the logic module subnets"
   type        = list(string)
 }
@@ -66,6 +76,11 @@ variable "data_address_space" {
 variable "data_address_prefixes" {
   description = "The address prefixes for the data module subnets"
   type        = list(string)
+}
+
+variable "data_nsg_name" {
+  description = "The name of the network security group for the data module"
+  type        = string
 }
 
 variable "subscription_id" {

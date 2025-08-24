@@ -41,3 +41,15 @@ variable "address_prefixes" {
   type        = list(string)
   default     = ["10.0.0.0/27", "10.0.0.32/28"]
 }
+
+variable "jumpserver_subnet_name" {
+  description = "The name of the jump server subnet"
+  type        = string
+  default     = "JumpServerSubnet"
+}
+
+variable "JumpServerPublicIP" {
+  description = "The name of the Jump Server Public IP"
+  type        = string
+  default     = "JumpServerPublicIP"
+}

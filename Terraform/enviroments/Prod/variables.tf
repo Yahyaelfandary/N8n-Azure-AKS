@@ -85,6 +85,17 @@ variable "data_nsg_name" {
 
 variable "subscription_id" {
   description = "The subscription ID for the Azure provider"
-  type        = string  
-  
+  type        = string
+
+}
+
+variable "private_dns_zone_name" {
+  description = "The name of the private DNS zone"
+  type        = string
+}
+
+variable "registration_status" {
+  description = "Whether auto-registration of virtual machine records is enabled"
+  type        = bool
+  default     = false
 }

@@ -10,3 +10,8 @@ output "virtual_network_name" {
 output "virtual_network_hub_id" {
   value = azurerm_virtual_network.rg-n8n-aks.id
 }
+
+output "address_prefixes" {
+  value = azurerm_subnet.azurefirewall.address_prefixes
+  
+}

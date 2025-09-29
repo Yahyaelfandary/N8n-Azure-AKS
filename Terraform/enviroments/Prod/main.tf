@@ -32,7 +32,7 @@ module "data" {
   rg-n8n-aks-vnet_name        = var.data_rg-n8n-aks-vnet_name
   address_space               = var.data_address_space
   address_prefixes            = var.data_address_prefixes
-  source_address_prefix_logic = module.logic.address_prefixes[0]
+  source_address_prefix_logic = module.hub.address_prefixes[0]
   rg-n8n-aks-nsg_name         = var.data_nsg_name
 }
 
@@ -75,7 +75,7 @@ module "p-dns-zone" {
   source              = "../../Modules/Network/Private-DNS/Main"
   p_dns_zone_name     = var.private_dns_zone_name
   resource_group_name = var.resource_group_name
-  depends_on = [ module.hub, module.logic, module.data ]
+  depends_on          = [module.hub, module.logic, module.data]
 
 }
 
@@ -96,7 +96,7 @@ module "p-dns-logic-link" {
   link_name             = "${module.p-dns-zone.private_dns_zone_name}-to-${var.logic_rg-n8n-aks-vnet_name}-link"
   registration_status   = false
 
-  depends_on = [ module.p-dns-hub-link ]
+  depends_on = [module.p-dns-hub-link]
 }
 
 module "p-dns-data-link" {
@@ -107,5 +107,30 @@ module "p-dns-data-link" {
   link_name             = "${module.p-dns-zone.private_dns_zone_name}-to-${var.data_rg-n8n-aks-vnet_name}-link"
   registration_status   = false
 
-  depends_on = [ module.p-dns-logic-link ]
+  depends_on = [module.p-dns-logic-link]
+}
+
+module "psql-server" {
+  source                 = "../../Modules/Database/Postegresql/Server"
+  resource_group_name    = var.resource_group_name
+  location               = var.location
+  administrator_login    = var.psql_admin_username
+  administrator_password = var.psql_admin_password
+  psql_server            = var.psql_server_name
+  psql_server_SNet_id    = module.data.subnet_id
+  delegated_subnet_id    = module.data.subnet_id
+  private_dns_zone_id    = module.p-dns-zone.private_dns_zone_id
+}
+
+module "PrivateEndpoint" {
+  source                 = "../../Modules/Database/Postegresql/Private-Endpoint"
+  location               = var.location
+  resource_group_name    = var.resource_group_name
+  psql_server_SNet_id    = module.hub.pe_subnet_id
+}
+
+module "DB" {
+  source         = "../../Modules/Database/Postegresql/DB"
+  psql_db_name   = var.database_name
+  psql_server_id = module.psql-server.psql_server_id
 }

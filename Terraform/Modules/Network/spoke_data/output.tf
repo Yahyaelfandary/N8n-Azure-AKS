@@ -9,3 +9,8 @@ output "virtual_network_name" {
 output "virtual_network_data_id" {
   value = azurerm_virtual_network.rg-n8n-aks.id
 }
+
+output "subnet_id" {
+  value = azurerm_subnet.subnet.id
+
+}

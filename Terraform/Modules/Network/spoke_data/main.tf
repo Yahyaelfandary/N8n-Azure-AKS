@@ -8,15 +8,22 @@ resource "azurerm_virtual_network" "rg-n8n-aks" {
   location            = azurerm_resource_group.rg-n8n-aks.location
   resource_group_name = azurerm_resource_group.rg-n8n-aks.name
   address_space       = var.address_space
+}
 
-  subnet {
-    name             = "DBSubnet"
-    address_prefixes = var.address_prefixes
-    security_group   = azurerm_network_security_group.rg-n8n-aks-nsg.id
-  }
+resource "azurerm_subnet" "subnet" {
+  name                 = "DBSubnet"
+  address_prefixes     = var.address_prefixes
+  resource_group_name  = azurerm_resource_group.rg-n8n-aks.name
+  virtual_network_name = azurerm_virtual_network.rg-n8n-aks.name
+  # service_endpoints    = ["Microsoft.DBforPostgreSQL/flexibleServers"]
 
-  tags = {
-    environment = "Production"
+  delegation {
+    name = "dbDelegation"
+
+    service_delegation {
+      name    = "Microsoft.DBforPostgreSQL/flexibleServers"
+      actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+    }
   }
 }
 
@@ -26,7 +33,7 @@ resource "azurerm_network_security_group" "rg-n8n-aks-nsg" {
   resource_group_name = azurerm_resource_group.rg-n8n-aks.name
 
   security_rule {
-    name                       = "Allow-logic"
+    name                       = "Allow-Hub-to-Logic-PostgreSQL"
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"

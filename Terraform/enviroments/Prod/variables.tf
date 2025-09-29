@@ -99,3 +99,24 @@ variable "registration_status" {
   type        = bool
   default     = false
 }
+
+variable "psql_admin_username" {
+  description = "The admin username for the PostgreSQL database"
+  type        = string
+}
+
+variable "psql_admin_password" {
+  description = "The admin password for the PostgreSQL database"
+  type        = string
+}
+
+variable "psql_server_name" {
+  description = "The name of the PostgreSQL server"
+  type        = string
+
+}
+
+variable "database_name" {
+  description = "The name of the PostgreSQL database"
+  type        = string
+}

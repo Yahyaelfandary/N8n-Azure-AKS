@@ -37,9 +37,3 @@ variable "psql_server" {
   description = "The name of the PostgreSQL database"
   type        = string
 }
-
-variable "psql_server_SNet_id" {
-  description = "The subnet ID for the PostgreSQL private endpoint"
-  type        = string
-  
-}

@@ -120,3 +120,17 @@ variable "database_name" {
   description = "The name of the PostgreSQL database"
   type        = string
 }
+
+variable "logic_subnet_name" {
+  description = "The name of the subnet for the logic module"
+  type        = string
+  default     = "AKSSubnet"
+  
+}
+
+variable "postgres_private_dns_zone_name" {
+  description = "The name of the private DNS zone for PostgreSQL"
+  type        = string
+  default     = "PSQL.postgres.database.azure.com"
+  
+}

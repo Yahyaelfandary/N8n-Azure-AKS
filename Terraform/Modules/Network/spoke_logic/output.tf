@@ -10,6 +10,6 @@ output "virtual_network_logic_id" {
   value = azurerm_virtual_network.rg-n8n-aks.id
 }
 
-output "address_prefixes" {
-  value = [for subnet in azurerm_virtual_network.rg-n8n-aks.subnet : subnet.address_prefixes if subnet.name == "AKSSubnet"][0]
+output "subnet_id" {
+  value = azurerm_subnet.rg-n8n-aks.id
 }

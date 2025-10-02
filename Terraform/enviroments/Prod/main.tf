@@ -174,3 +174,15 @@ module "DB" {
 
   depends_on = [ module.psql-server ]
 }
+
+module "jumpserverlinux-vm" {
+  source                = "../../Modules/Compute/Linux VM"
+  resource_group_name   = var.resource_group_name
+  location              = var.location
+  admin_username        = var.linux_admin_username
+  admin_password        = var.linux_admin_password
+  network_interface_id  = module.hub.jumpserver_nic_id
+
+  depends_on = [module.hub]
+  
+}

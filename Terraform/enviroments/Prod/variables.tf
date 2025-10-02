@@ -134,3 +134,13 @@ variable "postgres_private_dns_zone_name" {
   default     = "PSQL.postgres.database.azure.com"
   
 }
+
+variable "linux_admin_username" {
+  description = "The admin username for the Linux VM"
+  type        = string
+}
+
+variable "linux_admin_password" {
+  description = "The admin password for the Linux VM"
+  type        = string
+}

@@ -87,12 +87,11 @@ resource "azurerm_network_interface" "JumpServerNIC" {
     public_ip_address_id           = azurerm_public_ip.JumpServerPublicIP.id
   }
 }
+#resource "azurerm_subnet" "pe_subnet" {
+#  name                 = "snet-private-endpoints"
+#  resource_group_name  = azurerm_resource_group.rg-n8n-aks.name
+#  virtual_network_name = azurerm_virtual_network.rg-n8n-aks.name
+#  address_prefixes     = [var.address_prefixes[2]]
 
-resource "azurerm_subnet" "pe_subnet" {
-  name                 = "snet-private-endpoints"
-  resource_group_name  = azurerm_resource_group.rg-n8n-aks.name
-  virtual_network_name = azurerm_virtual_network.rg-n8n-aks.name
-  address_prefixes     = [var.address_prefixes[2]]
-
-  private_link_service_network_policies_enabled = true
-}
+#  private_link_service_network_policies_enabled = true
+#}

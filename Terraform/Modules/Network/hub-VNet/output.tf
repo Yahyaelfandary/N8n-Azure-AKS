@@ -15,3 +15,8 @@ output "address_prefixes" {
   value = azurerm_subnet.azurefirewall.address_prefixes
   
 }
+
+output "jumpserver_nic_id" {
+  value = azurerm_network_interface.JumpServerNIC.id
+  
+}

@@ -186,3 +186,11 @@ module "jumpserverlinux-vm" {
   depends_on = [module.hub]
   
 }
+
+module "Hub-FW" {
+  source               = "../../Modules/Network/Hub-FW"
+  resource_group_name  = var.resource_group_name
+  location             = var.location
+  Hub-FW-subnet_id     = module.hub.AzureFirewallSubnet_id
+  
+}

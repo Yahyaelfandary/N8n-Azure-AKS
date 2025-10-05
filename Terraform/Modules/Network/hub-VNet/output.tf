@@ -12,11 +12,16 @@ output "virtual_network_hub_id" {
 }
 
 output "address_prefixes" {
-  value = azurerm_subnet.azurefirewall.address_prefixes
+  value = azurerm_subnet.AzureFirewallSubnet.address_prefixes
   
 }
 
 output "jumpserver_nic_id" {
   value = azurerm_network_interface.JumpServerNIC.id
+  
+}
+
+output "AzureFirewallSubnet_id" {
+  value = azurerm_subnet.AzureFirewallSubnet.id
   
 }

@@ -44,8 +44,8 @@ resource "azurerm_virtual_network" "rg-n8n-aks" {
   }
 }
 
-resource "azurerm_subnet" "azurefirewall" {
-  name                 = "AzurefirewallSubnet"
+resource "azurerm_subnet" "AzureFirewallSubnet" {
+  name                 = "AzureFirewallSubnet"
   resource_group_name  = azurerm_resource_group.rg-n8n-aks.name
   virtual_network_name = azurerm_virtual_network.rg-n8n-aks.name
   address_prefixes     = [var.address_prefixes[0]]

@@ -35,3 +35,65 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+.secrets.hcl
+secrets.yaml
+# Ignore Kubernetes secrets and sensitive files
+secrets.yaml
+*.secret.yaml
+*.secrets.yaml
+*.enc.yaml
+*.enc.yml
+*.secret.yml
+*.secrets.yml
+secrets/
+*.env
+.env.*
+
+# Ignore Helm chart generated files
+charts/
+*.tgz
+
+# Ignore Kustomize build output
+kustomize-build/
+*.kustomize.yaml
+
+# Ignore kubectl output files
+*.out
+*.log
+
+# Ignore local configuration files
+*.local.yaml
+*.local.yml
+*.local.json
+*.local.env
+
+# Ignore backup files
+*.bak
+*.backup
+
+# Ignore editor/IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Ignore OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Ignore Docker files (if using Docker)
+docker-compose.override.yml
+.docker/
+.dockerignore
+
+# Ignore Terraform files (if using IaC)
+*.tfstate
+*.tfstate.*
+.terraform/
+terraform.tfvars
+
+# Ignore Helm release files
+.release/
+*secrets

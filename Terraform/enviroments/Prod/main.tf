@@ -85,7 +85,7 @@ module "psql-p-dns-zone" {
   p_dns_zone_name     = var.postgres_private_dns_zone_name
   resource_group_name = var.resource_group_name
   depends_on          = [module.hub, module.logic, module.data]
-  
+
 }
 
 module "p-dns-hub-link" {
@@ -127,7 +127,7 @@ module "psql-p-dns-hub-link" {
   link_name             = "${module.psql-p-dns-zone.private_dns_zone_name}-to-${var.rg-n8n-aks-vnet_name}-link"
   registration_status   = false
 
-  depends_on = [ module.psql-p-dns-zone ]
+  depends_on = [module.psql-p-dns-zone]
 }
 
 module "psql-p-dns-data-link" {
@@ -138,8 +138,8 @@ module "psql-p-dns-data-link" {
   link_name             = "${module.psql-p-dns-zone.private_dns_zone_name}-to-${var.data_rg-n8n-aks-vnet_name}-link"
   registration_status   = false
 
-  depends_on = [ module.psql-p-dns-logic-link ]
-  
+  depends_on = [module.psql-p-dns-logic-link]
+
 }
 
 module "psql-p-dns-logic-link" {
@@ -150,8 +150,8 @@ module "psql-p-dns-logic-link" {
   link_name             = "${module.psql-p-dns-zone.private_dns_zone_name}-to-${var.logic_rg-n8n-aks-vnet_name}-link"
   registration_status   = false
 
-  depends_on = [ module.psql-p-dns-hub-link ]
-  
+  depends_on = [module.psql-p-dns-hub-link]
+
 }
 
 module "psql-server" {
@@ -164,7 +164,7 @@ module "psql-server" {
   delegated_subnet_id    = module.data.subnet_id
   private_dns_zone_id    = module.psql-p-dns-zone.private_dns_zone_id
 
-  depends_on = [ module.psql-p-dns-data-link ]
+  depends_on = [module.psql-p-dns-data-link]
 }
 
 module "DB" {
@@ -172,25 +172,38 @@ module "DB" {
   psql_db_name   = var.database_name
   psql_server_id = module.psql-server.psql_server_id
 
-  depends_on = [ module.psql-server ]
+  depends_on = [module.psql-server]
 }
 
 module "jumpserverlinux-vm" {
-  source                = "../../Modules/Compute/Linux VM"
-  resource_group_name   = var.resource_group_name
-  location              = var.location
-  admin_username        = var.linux_admin_username
-  admin_password        = var.linux_admin_password
-  network_interface_id  = module.hub.jumpserver_nic_id
-
-  depends_on = [module.hub]
-  
-}
-
-module "Hub-FW" {
-  source               = "../../Modules/Network/Hub-FW"
+  source               = "../../Modules/Compute/Linux VM"
   resource_group_name  = var.resource_group_name
   location             = var.location
-  Hub-FW-subnet_id     = module.hub.AzureFirewallSubnet_id
-  
+  admin_username       = var.linux_admin_username
+  admin_password       = var.linux_admin_password
+  network_interface_id = module.hub.jumpserver_nic_id
+
+  depends_on = [module.hub]
+
+}
+
+# module "Hub-FW" {
+#  source               = "../../Modules/Network/Hub-FW"
+#  resource_group_name  = var.resource_group_name
+#  location             = var.location
+#  Hub-FW-subnet_id     = module.hub.AzureFirewallSubnet_id
+#  
+#}
+
+module "n8n-aks" {
+  source                 = "../../Modules/Compute/AKS"
+  n8n-aks-name           = "prod-n8n-aks-cluster"
+  resource_group_name    = var.resource_group_name
+  resource_group_location= var.location
+  dns-prefix             = "prod-n8n-aks"
+  node-count             = 2
+  vm-size                = "Standard_B2s"
+  vnet_subnet_id         = module.logic.subnet_id
+
+  depends_on = [module.logic, module.p-dns-data-link]
 }

@@ -144,3 +144,18 @@ variable "linux_admin_password" {
   description = "The admin password for the Linux VM"
   type        = string
 }
+
+variable "service_cidr" {
+  description = "The internal IP range for the AKS cluster"
+  type        = string
+}
+
+variable "dns_service_ip" {
+  description = "The internal DNS service IP for the AKS cluster"
+  type        = string
+}
+
+variable "docker_bridge_cidr" {
+  description = "The internal Docker bridge CIDR for the AKS cluster"
+  type        = string
+}

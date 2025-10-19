@@ -44,3 +44,8 @@ resource "azurerm_network_security_group" "rg-n8n-aks-nsg" {
     destination_address_prefix = "*"
   }
 }
+
+resource "azurerm_subnet_network_security_group_association" "nsg-association" {
+  subnet_id      = azurerm_subnet.subnet.id
+  network_security_group_id = azurerm_network_security_group.rg-n8n-aks-nsg.id
+}

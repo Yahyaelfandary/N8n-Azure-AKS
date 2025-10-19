@@ -3,6 +3,7 @@ resource "azurerm_kubernetes_cluster" "n8n-aks" {
   location            = var.resource_group_location
   resource_group_name = var.resource_group_name
   dns_prefix          = var.dns-prefix
+  
 
   default_node_pool {
     name       = "default"
@@ -16,7 +17,9 @@ resource "azurerm_kubernetes_cluster" "n8n-aks" {
   }
 
   network_profile {
-    network_plugin    = "azure"
-    load_balancer_sku = "standard"
+    network_plugin      = "azure"
+    load_balancer_sku   = "standard"
+    service_cidr        = var.service_cidr
+    dns_service_ip      = var.dns_service_ip
   }
 }

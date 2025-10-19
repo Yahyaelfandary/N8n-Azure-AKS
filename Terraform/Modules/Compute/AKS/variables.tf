@@ -29,3 +29,18 @@ variable "vnet_subnet_id" {
   description = "The id of the subnet which aks cluster be deployed into"
   type        = string
 }
+
+variable "service_cidr" {
+  description = "the actual address space or ip range used internally in aks for the cluster ip"
+  type        = string
+}
+
+variable "dns_service_ip" {
+  description = "The internal dns service ip address for the aks cluster"
+  type        = string
+}
+
+variable "docker_bridge_cidr" {
+  description = "The internal docker bridge cidr for the aks cluster"
+  type        = string
+}

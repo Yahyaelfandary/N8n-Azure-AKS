@@ -15,13 +15,13 @@ variable "rg-n8n-aks-vnet_name" {
 
 variable "address_space" {
   description = "The address space for the virtual network"
-  default     = ["10.0.2.0/24"]
+  type        = list(string)
 }
 
 variable "address_prefixes" {
   description = "The address prefixes for the virtual network subnets"
   type        = list(string)
-  default     = ["10.0.2.0/27"]
+
 }
 
 variable "rg-n8n-aks-nsg_name" {

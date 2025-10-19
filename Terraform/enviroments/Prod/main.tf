@@ -72,6 +72,23 @@ module "data-hub-peering" {
 
 }
 
+module "data-logic-peering" {
+  source                    = "../../Modules/Network/network_peering"
+  resource_group_name       = var.resource_group_name
+  rg-n8n-aks-vnet_name      = module.data.virtual_network_name
+  remote_virtual_network_id = module.logic.virtual_network_logic_id
+  virtual_network_name      = "${var.data_rg-n8n-aks-vnet_name}-to-${var.logic_rg-n8n-aks-vnet_name}-peering"
+}
+
+module "logic-data-peering" {
+  source                    = "../../Modules/Network/network_peering"
+  resource_group_name       = var.resource_group_name
+  rg-n8n-aks-vnet_name      = module.logic.virtual_network_name
+  remote_virtual_network_id = module.data.virtual_network_data_id
+  virtual_network_name      = "${var.logic_rg-n8n-aks-vnet_name}-to-${var.data_rg-n8n-aks-vnet_name}-peering"
+
+}
+
 module "p-dns-zone" {
   source              = "../../Modules/Network/Private-DNS/Main"
   p_dns_zone_name     = var.private_dns_zone_name
@@ -196,14 +213,17 @@ module "jumpserverlinux-vm" {
 #}
 
 module "n8n-aks" {
-  source                 = "../../Modules/Compute/AKS"
-  n8n-aks-name           = "prod-n8n-aks-cluster"
-  resource_group_name    = var.resource_group_name
-  resource_group_location= var.location
-  dns-prefix             = "prod-n8n-aks"
-  node-count             = 2
-  vm-size                = "Standard_B2s"
-  vnet_subnet_id         = module.logic.subnet_id
+  source                  = "../../Modules/Compute/AKS"
+  n8n-aks-name            = "prod-n8n-aks-cluster"
+  resource_group_name     = var.resource_group_name
+  resource_group_location = var.location
+  dns-prefix              = "prod-n8n-aks"
+  node-count              = 2
+  vm-size                 = "Standard_B2s"
+  vnet_subnet_id          = module.logic.subnet_id
+  service_cidr            = var.service_cidr
+  dns_service_ip          = var.dns_service_ip
+  docker_bridge_cidr      = var.docker_bridge_cidr
 
   depends_on = [module.logic, module.p-dns-data-link]
 }

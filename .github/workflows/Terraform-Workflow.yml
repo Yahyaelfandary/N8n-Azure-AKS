@@ -1,5 +1,5 @@
 name: terraform-Workflow
-on: 
+#on:   I have commented this out to prevent auto triggering of workflow 
   push:
     paths:
       - 'Terraform/**'
